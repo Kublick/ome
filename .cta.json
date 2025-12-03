@@ -1,0 +1,24 @@
+{
+  "initialized": true,
+  "mode": "file-router",
+  "projectName": "ome",
+  "typescript": true,
+  "tailwind": true,
+  "git": true,
+  "addOnOptions": {},
+  "packageManager": "pnpm",
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "compiler",
+    "form",
+    "oRPC",
+    "shadcn",
+    "t3env",
+    "table",
+    "start",
+    "tanstack-query",
+    "biome",
+    "nitro"
+  ]
+}
