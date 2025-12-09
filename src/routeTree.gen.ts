@@ -14,6 +14,8 @@ import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-qu
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoOrpcTodoRouteImport } from './routes/demo/orpc-todo'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
+import { Route as authSingupRouteImport } from './routes/(auth)/singup'
+import { Route as authSigninRouteImport } from './routes/(auth)/signin'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
@@ -50,6 +52,16 @@ const DemoOrpcTodoRoute = DemoOrpcTodoRouteImport.update({
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authSingupRoute = authSingupRouteImport.update({
+  id: '/(auth)/singup',
+  path: '/singup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authSigninRoute = authSigninRouteImport.update({
+  id: '/(auth)/signin',
+  path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
@@ -115,6 +127,8 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/signin': typeof authSigninRoute
+  '/singup': typeof authSingupRoute
   '/api/$': typeof ApiSplatRoute
   '/demo/orpc-todo': typeof DemoOrpcTodoRoute
   '/demo/table': typeof DemoTableRoute
@@ -134,6 +148,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/signin': typeof authSigninRoute
+  '/singup': typeof authSingupRoute
   '/api/$': typeof ApiSplatRoute
   '/demo/orpc-todo': typeof DemoOrpcTodoRoute
   '/demo/table': typeof DemoTableRoute
@@ -154,6 +170,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/(auth)/signin': typeof authSigninRoute
+  '/(auth)/singup': typeof authSingupRoute
   '/api/$': typeof ApiSplatRoute
   '/demo/orpc-todo': typeof DemoOrpcTodoRoute
   '/demo/table': typeof DemoTableRoute
@@ -175,6 +193,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/signin'
+    | '/singup'
     | '/api/$'
     | '/demo/orpc-todo'
     | '/demo/table'
@@ -194,6 +214,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/signin'
+    | '/singup'
     | '/api/$'
     | '/demo/orpc-todo'
     | '/demo/table'
@@ -213,6 +235,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/(auth)/signin'
+    | '/(auth)/singup'
     | '/api/$'
     | '/demo/orpc-todo'
     | '/demo/table'
@@ -233,6 +257,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  authSigninRoute: typeof authSigninRoute
+  authSingupRoute: typeof authSingupRoute
   ApiSplatRoute: typeof ApiSplatRoute
   DemoOrpcTodoRoute: typeof DemoOrpcTodoRoute
   DemoTableRoute: typeof DemoTableRoute
@@ -286,6 +312,20 @@ declare module '@tanstack/react-router' {
       path: '/api/$'
       fullPath: '/api/$'
       preLoaderRoute: typeof ApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/singup': {
+      id: '/(auth)/singup'
+      path: '/singup'
+      fullPath: '/singup'
+      preLoaderRoute: typeof authSingupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/signin': {
+      id: '/(auth)/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof authSigninRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/start/server-funcs': {
@@ -377,6 +417,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  authSigninRoute: authSigninRoute,
+  authSingupRoute: authSingupRoute,
   ApiSplatRoute: ApiSplatRoute,
   DemoOrpcTodoRoute: DemoOrpcTodoRoute,
   DemoTableRoute: DemoTableRoute,

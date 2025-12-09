@@ -5,6 +5,8 @@ export const env = createEnv({
 	server: {
 		DATABASE_URL: z.string(),
 		BETTER_AUTH_SECRET: z.string().min(1),
+		GOOGLE_CLIENT_ID: z.string().min(1),
+		GOOGLE_CLIENT_SECRET: z.string().min(1),
 	},
 
 	/**
@@ -15,6 +17,7 @@ export const env = createEnv({
 
 	client: {
 		VITE_APP_TITLE: z.string().min(1).optional(),
+		VITE_BETTER_AUTH_URL: z.url(),
 	},
 	/**
 	 * What object holds the environment variables at runtime. This is usually
