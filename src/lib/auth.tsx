@@ -1,8 +1,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, openAPI } from "better-auth/plugins";
-import { sendVerificationEmail } from "@/email/send-verification";
-import { clientEnv, env } from "@/env";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
+import { sendVerificationEmail } from "../email/send-verification";
+import { clientEnv, env } from "../env";
 import { prisma } from "./prisma";
 
 export const auth = betterAuth({
@@ -28,5 +29,6 @@ export const auth = betterAuth({
 			clientSecret: env.GOOGLE_CLIENT_SECRET,
 		},
 	},
-	plugins: [openAPI(), admin()],
+
+	plugins: [tanstackStartCookies(), openAPI(), admin()],
 });
