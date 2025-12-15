@@ -1,0 +1,102 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail01FreeIcons, Mail01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+	FieldSeparator,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+
+export const Route = createFileRoute("/(auth)/forgot")({
+	component: RouteComponent,
+});
+
+const formSchema = z.object({
+	email: z.email({ message: "Please enter a valid email address" }),
+});
+
+function RouteComponent() {
+	const [isLoading, setIsLoading] = useState(false);
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			email: "",
+		},
+	});
+
+	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+		// Implement password reset logic here
+		console.log("Password reset requested for:", data.email);
+	};
+
+	return (
+		<div className="flex min-h-screen items-center justify-center p-4 sm:p-6 md:p-8">
+			<Card className="w-full max-w-md">
+				<CardHeader className="space-y-1">
+					<CardTitle className="font-bold text-2xl">
+						Reinciar tu constraseña
+					</CardTitle>
+					<CardDescription>
+						Ingresa el correo electronico con el que te registraste previamente
+						para restablecer tu contraseña
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+						<FieldGroup>
+							<Controller
+								control={form.control}
+								name="email"
+								render={({ field, fieldState }) => (
+									<Field data-invalid={fieldState.invalid}>
+										<FieldLabel>Email</FieldLabel>
+
+										<div className="relative">
+											<HugeiconsIcon
+												icon={Mail01Icon}
+												className="absolute top-2.5 left-3 h-4 w-4 text-muted-foreground"
+											/>
+											<Input
+												placeholder="email@email.com"
+												className="pl-10"
+												{...field}
+											/>
+										</div>
+										{fieldState.invalid && (
+											<FieldError errors={[fieldState.error]} />
+										)}
+									</Field>
+								)}
+							/>
+						</FieldGroup>
+						<Button type="submit" className="w-full" disabled={isLoading}>
+							{isLoading ? "Enviando..." : "Enviar"}
+						</Button>
+					</form>
+				</CardContent>
+				<CardFooter className="flex justify-center border-t p-4">
+					<Button>
+						<Link to="/signin">Iniciar Sesión</Link>
+					</Button>
+				</CardFooter>
+			</Card>
+		</div>
+	);
+}

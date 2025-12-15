@@ -13,9 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoOrpcTodoRouteImport } from './routes/demo/orpc-todo'
+import { Route as DashboardOverviewRouteImport } from './routes/dashboard/overview'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
-import { Route as authSingupRouteImport } from './routes/(auth)/singup'
+import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authSigninRouteImport } from './routes/(auth)/signin'
+import { Route as authForgotRouteImport } from './routes/(auth)/forgot'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
@@ -49,19 +51,29 @@ const DemoOrpcTodoRoute = DemoOrpcTodoRouteImport.update({
   path: '/demo/orpc-todo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardOverviewRoute = DashboardOverviewRouteImport.update({
+  id: '/dashboard/overview',
+  path: '/dashboard/overview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authSingupRoute = authSingupRouteImport.update({
-  id: '/(auth)/singup',
-  path: '/singup',
+const authSignupRoute = authSignupRouteImport.update({
+  id: '/(auth)/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authSigninRoute = authSigninRouteImport.update({
   id: '/(auth)/signin',
   path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authForgotRoute = authForgotRouteImport.update({
+  id: '/(auth)/forgot',
+  path: '/forgot',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
@@ -127,9 +139,11 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/forgot': typeof authForgotRoute
   '/signin': typeof authSigninRoute
-  '/singup': typeof authSingupRoute
+  '/signup': typeof authSignupRoute
   '/api/$': typeof ApiSplatRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
   '/demo/orpc-todo': typeof DemoOrpcTodoRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -148,9 +162,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot': typeof authForgotRoute
   '/signin': typeof authSigninRoute
-  '/singup': typeof authSingupRoute
+  '/signup': typeof authSignupRoute
   '/api/$': typeof ApiSplatRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
   '/demo/orpc-todo': typeof DemoOrpcTodoRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -170,9 +186,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/(auth)/forgot': typeof authForgotRoute
   '/(auth)/signin': typeof authSigninRoute
-  '/(auth)/singup': typeof authSingupRoute
+  '/(auth)/signup': typeof authSignupRoute
   '/api/$': typeof ApiSplatRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
   '/demo/orpc-todo': typeof DemoOrpcTodoRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -193,9 +211,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/forgot'
     | '/signin'
-    | '/singup'
+    | '/signup'
     | '/api/$'
+    | '/dashboard/overview'
     | '/demo/orpc-todo'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -214,9 +234,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/forgot'
     | '/signin'
-    | '/singup'
+    | '/signup'
     | '/api/$'
+    | '/dashboard/overview'
     | '/demo/orpc-todo'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -235,9 +257,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/(auth)/forgot'
     | '/(auth)/signin'
-    | '/(auth)/singup'
+    | '/(auth)/signup'
     | '/api/$'
+    | '/dashboard/overview'
     | '/demo/orpc-todo'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -257,9 +281,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  authForgotRoute: typeof authForgotRoute
   authSigninRoute: typeof authSigninRoute
-  authSingupRoute: typeof authSingupRoute
+  authSignupRoute: typeof authSignupRoute
   ApiSplatRoute: typeof ApiSplatRoute
+  DashboardOverviewRoute: typeof DashboardOverviewRoute
   DemoOrpcTodoRoute: typeof DemoOrpcTodoRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
@@ -307,6 +333,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoOrpcTodoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/overview': {
+      id: '/dashboard/overview'
+      path: '/dashboard/overview'
+      fullPath: '/dashboard/overview'
+      preLoaderRoute: typeof DashboardOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/$': {
       id: '/api/$'
       path: '/api/$'
@@ -314,11 +347,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/singup': {
-      id: '/(auth)/singup'
-      path: '/singup'
-      fullPath: '/singup'
-      preLoaderRoute: typeof authSingupRouteImport
+    '/(auth)/signup': {
+      id: '/(auth)/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof authSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/signin': {
@@ -326,6 +359,13 @@ declare module '@tanstack/react-router' {
       path: '/signin'
       fullPath: '/signin'
       preLoaderRoute: typeof authSigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/forgot': {
+      id: '/(auth)/forgot'
+      path: '/forgot'
+      fullPath: '/forgot'
+      preLoaderRoute: typeof authForgotRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/start/server-funcs': {
@@ -417,9 +457,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  authForgotRoute: authForgotRoute,
   authSigninRoute: authSigninRoute,
-  authSingupRoute: authSingupRoute,
+  authSignupRoute: authSignupRoute,
   ApiSplatRoute: ApiSplatRoute,
+  DashboardOverviewRoute: DashboardOverviewRoute,
   DemoOrpcTodoRoute: DemoOrpcTodoRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
