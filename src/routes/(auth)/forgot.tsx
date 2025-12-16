@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail01FreeIcons, Mail01Icon } from "@hugeicons/core-free-icons";
+import { Mail01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,13 +17,12 @@ import {
 } from "@/components/ui/card";
 import {
 	Field,
-	FieldDescription,
 	FieldError,
 	FieldGroup,
 	FieldLabel,
-	FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/(auth)/forgot")({
 	component: RouteComponent,
@@ -41,9 +41,22 @@ function RouteComponent() {
 		},
 	});
 
-	const onSubmit = async (data: z.infer<typeof formSchema>) => {
-		// Implement password reset logic here
-		console.log("Password reset requested for:", data.email);
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		setIsLoading(true);
+		try {
+			const { email } = values;
+			await authClient.requestPasswordReset({
+				email,
+			});
+
+			toast("Correo con instrucciones para restablecer contraseña enviado");
+			setIsLoading(false);
+		} catch (error) {
+			console.log(error);
+			toast.error("Ocurrio un error intente mas tarde");
+			setIsLoading(false);
+			return;
+		}
 	};
 
 	return (

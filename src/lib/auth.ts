@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, openAPI } from "better-auth/plugins";
-import { sendVerificationEmail } from "@/email/send-verification";
+import { sendVerificationEmail } from "@/email/email-functions";
 import { clientEnv, env } from "@/env";
 import { prisma } from "./prisma";
 

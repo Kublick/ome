@@ -1,6 +1,7 @@
 import { render } from "@react-email/render";
 import VerificationEmail from "@/email/VerificationEmial";
 import { sendEmail } from "@/lib/email";
+import PasswordReset from "./PassowrdReset";
 
 export async function sendVerificationEmail({
 	userEmail,
@@ -24,5 +25,30 @@ export async function sendVerificationEmail({
 
 	console.log(
 		`Send verification email to ${userEmail} with link: ${confirmationUrl}`,
+	);
+}
+
+export async function requestPasswordReset({
+	userEmail,
+	userName,
+	confirmationUrl,
+}: {
+	userEmail: string;
+	userName: string;
+	confirmationUrl: string;
+}) {
+	const html = await render(
+		<PasswordReset name={userName} url={confirmationUrl} />,
+	);
+
+	await sendEmail({
+		to: userEmail,
+		subject: "Reinicia tu contraseña",
+		react: html,
+		text: `Reinicia tu contraseña aquí: ${confirmationUrl}`,
+	});
+
+	console.log(
+		`Send password reset email to ${userEmail} with link: ${confirmationUrl}`,
 	);
 }

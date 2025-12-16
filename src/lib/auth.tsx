@@ -2,7 +2,10 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, openAPI } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
-import { sendVerificationEmail } from "../email/send-verification";
+import {
+	requestPasswordReset,
+	sendVerificationEmail,
+} from "../email/email-functions";
 import { clientEnv, env } from "../env";
 import { prisma } from "./prisma";
 
@@ -12,6 +15,14 @@ export const auth = betterAuth({
 	}),
 	emailAndPassword: {
 		enabled: true,
+		sendResetPassword: async ({ user, token }) => {
+			const confirmationUrl = `${clientEnv.VITE_BETTER_AUTH_URL}/auth/reset?token=${token}`;
+			await requestPasswordReset({
+				userEmail: user.email,
+				userName: user.name,
+				confirmationUrl,
+			});
+		},
 	},
 	emailVerification: {
 		sendVerificationEmail: async ({ user, token }) => {
@@ -29,6 +40,5 @@ export const auth = betterAuth({
 			clientSecret: env.GOOGLE_CLIENT_SECRET,
 		},
 	},
-
 	plugins: [tanstackStartCookies(), openAPI(), admin()],
 });
