@@ -38,7 +38,8 @@
 
 2. **Set environment variables in Coolify:**
    - Add all variables from `.env.docker.example`
-   - Update URLs to match your domain
+   - Ensure `DATABASE_URL` points to your external database (required)
+   - If you are using an external DB, you do NOT need to add an internal DB service
 
 3. **Deploy:**
    - Coolify will build and deploy automatically
@@ -51,16 +52,15 @@
    - Set build context to `.`
 
 2. **Set environment variables:**
-   - `DATABASE_URL` - PostgreSQL connection string
+   - `DATABASE_URL` - PostgreSQL connection string (required)
    - `BETTER_AUTH_SECRET` - Secret key
    - `BETTER_AUTH_URL` - Your domain URL
    - `VITE_BETTER_AUTH_URL` - Your domain URL
    - `RESEND_API_KEY` - Resend API key
    - `PORT=3000`
 
-3. **Add PostgreSQL database in Coolify:**
-   - Create a PostgreSQL service
-   - Link it to your app
+3. **(Optional) Add PostgreSQL database in Coolify:**
+   - Only if you want Coolify to manage the DB. If you already manage your own DB, skip this step.
 
 4. **Deploy:**
    - Coolify will build and deploy
