@@ -1,6 +1,9 @@
-import { addTodo, listTodos } from './todos'
+import { getUser, listAccounts } from "./accounts";
+import { addTodo, listTodos } from "./todos";
 
 export default {
-  listTodos,
-  addTodo,
-}
+	listTodos,
+	addTodo,
+	getUser,
+	listAccounts,
+};

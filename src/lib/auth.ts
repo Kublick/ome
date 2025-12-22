@@ -1,9 +1,13 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, openAPI } from "better-auth/plugins";
-import { sendVerificationEmail } from "@/email/email-functions";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
+import {
+	requestPasswordReset,
+	sendVerificationEmail,
+} from "@/email/email-functions";
 import { clientEnv, env } from "@/env";
-import { prisma } from "./prisma";
+import { prisma } from "@/lib/prisma";
 
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
@@ -11,6 +15,14 @@ export const auth = betterAuth({
 	}),
 	emailAndPassword: {
 		enabled: true,
+		sendResetPassword: async ({ user, token }) => {
+			const confirmationUrl = `${clientEnv.VITE_BETTER_AUTH_URL}/auth/reset?token=${token}`;
+			await requestPasswordReset({
+				userEmail: user.email,
+				userName: user.name,
+				confirmationUrl,
+			});
+		},
 	},
 	emailVerification: {
 		sendVerificationEmail: async ({ user, token }) => {
@@ -28,5 +40,5 @@ export const auth = betterAuth({
 			clientSecret: env.GOOGLE_CLIENT_SECRET,
 		},
 	},
-	plugins: [openAPI(), admin()],
+	plugins: [tanstackStartCookies(), openAPI(), admin()],
 });

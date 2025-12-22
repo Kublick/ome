@@ -14,20 +14,26 @@ datasource db {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-
-  role       String?
-  banned     Boolean?  @default(false)
-  banReason  String?
-  banExpires DateTime?
+  id                    String                 @id
+  name                  String
+  email                 String
+  emailVerified         Boolean                @default(false)
+  image                 String?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  sessions              Session[]
+  accounts              Account[]
+  role                  String?
+  banned                Boolean?               @default(false)
+  banReason             String?
+  banExpires            DateTime?
+  financialAccounts     FinancialAccount[]
+  categories            Category[]
+  transactions          Transaction[]
+  budgets               Budget[]
+  installments          Installment[]
+  savingFunds           SavingFund[]
+  recurringTransactions RecurringTransaction[]
 
   @@unique([email])
   @@map("user")
@@ -81,4 +87,256 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// Financial Account (cash, credit, investment)
+model FinancialAccount {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name           String
+  type           FinancialAccountType
+  balance        Decimal              @default(0) @db.Decimal(15, 2)
+  currency       String               @default("USD")
+  description    String?
+  institution    String? // Bank/institution name
+  lastFourDigits String? // Last 4 digits for reference
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transactions          Transaction[]
+  savingFunds           SavingFund[]
+  recurringTransactions RecurringTransaction[]
+
+  @@index([userId])
+  @@map("financial_account")
+}
+
+enum FinancialAccountType {
+  CASH
+  CHECKING
+  SAVINGS
+  CREDIT_CARD
+  INVESTMENT
+  LOAN
+  OTHER
+}
+
+// Transaction Category
+model Category {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  color       String? // Hex color for UI
+  icon        String? // Icon identifier
+  type        CategoryType @default(EXPENSE)
+
+  // Self-referential for hierarchy
+  parentId String?
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children Category[] @relation("CategoryHierarchy")
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transactions          Transaction[]
+  budgets               Budget[]
+  recurringTransactions RecurringTransaction[]
+  order                 Int                    @default(0)
+
+  @@index([userId])
+  @@index([parentId])
+  @@map("category")
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+// Individual Transaction
+model Transaction {
+  id                     String                @id @default(cuid())
+  userId                 String
+  user                   User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId              String
+  account                FinancialAccount      @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  categoryId             String?
+  category               Category?             @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  amount                 Decimal               @db.Decimal(15, 2)
+  type                   TransactionType
+  date                   DateTime              @default(now())
+  description            String
+  notes                  String?
+  // Installment tracking
+  installmentId          String?
+  installment            Installment?          @relation(fields: [installmentId], references: [id], onDelete: SetNull)
+  installmentNumber      Int? // Which payment in the series (1, 2, 3...)
+  // Saving fund contribution
+  savingFundId           String?
+  savingFund             SavingFund?           @relation(fields: [savingFundId], references: [id], onDelete: SetNull)
+  // Recurring transaction
+  recurringTransactionId String?
+  recurringTransaction   RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id], onDelete: SetNull)
+  status                 TransactionStatus     @default(COMPLETED)
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([categoryId])
+  @@index([installmentId])
+  @@index([savingFundId])
+  @@index([date])
+  @@map("transaction")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+// Budget Planning
+model Budget {
+  id         String       @id @default(cuid())
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  amount     Decimal      @db.Decimal(15, 2)
+  period     BudgetPeriod
+  startDate  DateTime // When this budget period starts
+  endDate    DateTime? // Optional end date for budget
+  isActive   Boolean      @default(true)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([startDate])
+  @@map("budget")
+}
+
+enum BudgetPeriod {
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+// Installment Payment Plan
+model Installment {
+  id               String               @id @default(cuid())
+  userId           String
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String // e.g., "MacBook Pro Payment Plan"
+  description      String?
+  totalAmount      Decimal              @db.Decimal(15, 2)
+  numberOfPayments Int
+  paidPayments     Int                  @default(0)
+  startDate        DateTime
+  frequency        InstallmentFrequency
+  status           InstallmentStatus    @default(ACTIVE)
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  transactions     Transaction[]
+
+  @@index([userId])
+  @@map("installment")
+}
+
+enum InstallmentFrequency {
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+  QUARTERLY
+}
+
+enum InstallmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+// Saving Fund / Goal
+model SavingFund {
+  id            String            @id @default(cuid())
+  userId        String
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId     String? // Optional: which account holds this fund
+  account       FinancialAccount? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  name          String // e.g., "Emergency Fund", "Vacation to Japan"
+  description   String?
+  targetAmount  Decimal           @db.Decimal(15, 2)
+  currentAmount Decimal           @default(0) @db.Decimal(15, 2)
+  deadline      DateTime?
+  color         String? // For UI visualization
+  icon          String?
+  status        SavingFundStatus  @default(ACTIVE)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  transactions  Transaction[] // Contributions to this fund
+
+  @@index([userId])
+  @@index([accountId])
+  @@map("saving_fund")
+}
+
+enum SavingFundStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+// Recurring Transaction Template
+model RecurringTransaction {
+  id           String             @id @default(cuid())
+  userId       String
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId    String
+  account      FinancialAccount   @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  categoryId   String?
+  category     Category?          @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  name         String // e.g., "Netflix Subscription"
+  description  String?
+  amount       Decimal            @db.Decimal(15, 2)
+  type         TransactionType
+  frequency    RecurringFrequency
+  startDate    DateTime
+  endDate      DateTime? // Optional end date
+  nextDueDate  DateTime // Next expected transaction date
+  autoGenerate Boolean            @default(false) // Auto-create transactions?
+  isActive     Boolean            @default(true)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  transactions Transaction[] // Generated transactions
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([categoryId])
+  @@index([nextDueDate])
+  @@map("recurring_transaction")
+}
+
+enum RecurringFrequency {
+  DAILY
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
 }
