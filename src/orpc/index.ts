@@ -1,38 +1,18 @@
-import { ORPCError, os } from "@orpc/server";
-import type { ResponseHeadersPluginContext } from "@orpc/server/plugins";
-import { getRequestHeaders } from "@tanstack/react-start/server";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { type Context, ORPCError, os } from "@orpc/server";
 
-const base = os
-	.$context<ResponseHeadersPluginContext>()
-	.use(async ({ next }) => {
-		const session = await auth.api.getSession({ headers: getRequestHeaders() });
+export const o = os.$context<Context>();
 
-		return await next({
-			context: {
-				user: session?.user,
-				session: session?.session,
-				db: prisma,
-			},
-		});
+export const publicProcedure = o;
+
+const requireAuth = o.middleware(async ({ context, next }) => {
+	if (!context.session?.user) {
+		throw new ORPCError("UNAUTHORIZED");
+	}
+	return next({
+		context: {
+			session: context.session,
+		},
 	});
+});
 
-export const publicProcedure = () => base;
-
-export const protectedProcedure = () =>
-	base.use(async ({ context, next }) => {
-		const { user, session } = context;
-
-		if (!user || !session) {
-			throw new ORPCError("UNAUTHORIZED");
-		}
-
-		return await next({
-			context: {
-				...context,
-				user,
-				session,
-			},
-		});
-	});
+export const protectedProcedure = publicProcedure.use(requireAuth);

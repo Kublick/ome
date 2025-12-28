@@ -1,10 +1,5 @@
 import { z } from "zod";
 
-export const TodoSchema = z.object({
-	id: z.number().int().min(1),
-	name: z.string(),
-});
-
 // Account related schemas
 export const FinancialAccountType = z.enum([
 	"CASH",
@@ -73,4 +68,39 @@ export const AdjustBalanceInput = z.object({
 	// signed decimal string e.g. "-12.34" or "100.00"
 	amount: z.string(),
 	reason: z.string().optional(),
+});
+
+export const CategoryInput = z.object({
+	name: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
+	color: z.string().optional(),
+	icon: z.string().optional(),
+	type: z.enum(["INCOME", "EXPENSE", "TRANSFER"]).optional(),
+});
+
+export const CategoryUpdateInput = z.object({
+	id: z.string(),
+	name: z
+		.string()
+		.min(3, "El nombre debe tener al menos 3 caracteres")
+		.optional(),
+	color: z.string().optional(),
+	icon: z.string().optional(),
+	type: z.enum(["INCOME", "EXPENSE", "TRANSFER"]).optional(),
+	description: z.string().optional(),
+	isActive: z.boolean().optional(),
+	order: z.number().int().optional(),
+});
+
+export const CategoryOutput = z.object({
+	id: z.string(),
+	userId: z.string(),
+	name: z.string(),
+	description: z.string().nullable().optional(),
+	isActive: z.boolean(),
+	order: z.number().int(),
+	type: z.enum(["INCOME", "EXPENSE", "TRANSFER"]),
+	color: z.string().nullable().optional(),
+	icon: z.string().nullable().optional(),
+	createdAt: z.string(),
+	updatedAt: z.string(),
 });

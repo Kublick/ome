@@ -1,9 +1,31 @@
-import { getUser, listAccounts } from "./accounts";
-import { addTodo, listTodos } from "./todos";
+import type { RouterClient } from "@orpc/server";
 
-export default {
-	listTodos,
-	addTodo,
-	getUser,
-	listAccounts,
+import { protectedProcedure, publicProcedure } from "../index";
+import {
+	createCategory,
+	deleteCategory,
+	getCategory,
+	listCategories,
+	updateCategories,
+} from "./categories";
+
+export const appRouter = {
+	healthCheck: publicProcedure.handler(() => {
+		return "OK";
+	}),
+	privateData: protectedProcedure.handler(({ context }) => {
+		return {
+			message: "This is private",
+			user: context.session?.user,
+		};
+	}),
+	category: {
+		createCategory,
+		listCategories,
+		updateCategories,
+		deleteCategory,
+		getCategory,
+	},
 };
+export type AppRouter = typeof appRouter;
+export type AppRouterClient = RouterClient<typeof appRouter>;

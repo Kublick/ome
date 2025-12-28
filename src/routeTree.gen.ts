@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardOverviewRouteImport } from './routes/dashboard/overview'
-import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authSigninRouteImport } from './routes/(auth)/signin'
 import { Route as authForgotRouteImport } from './routes/(auth)/forgot'
@@ -33,11 +32,6 @@ const DashboardOverviewRoute = DashboardOverviewRouteImport.update({
   id: '/overview',
   path: '/overview',
   getParentRoute: () => DashboardRoute,
-} as any)
-const ApiSplatRoute = ApiSplatRouteImport.update({
-  id: '/api/$',
-  path: '/api/$',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const authSignupRoute = authSignupRouteImport.update({
   id: '/(auth)/signup',
@@ -71,7 +65,6 @@ export interface FileRoutesByFullPath {
   '/forgot': typeof authForgotRoute
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
-  '/api/$': typeof ApiSplatRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
@@ -82,7 +75,6 @@ export interface FileRoutesByTo {
   '/forgot': typeof authForgotRoute
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
-  '/api/$': typeof ApiSplatRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
@@ -94,7 +86,6 @@ export interface FileRoutesById {
   '/(auth)/forgot': typeof authForgotRoute
   '/(auth)/signin': typeof authSigninRoute
   '/(auth)/signup': typeof authSignupRoute
-  '/api/$': typeof ApiSplatRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
@@ -107,7 +98,6 @@ export interface FileRouteTypes {
     | '/forgot'
     | '/signin'
     | '/signup'
-    | '/api/$'
     | '/dashboard/overview'
     | '/api/auth/$'
     | '/api/rpc/$'
@@ -118,7 +108,6 @@ export interface FileRouteTypes {
     | '/forgot'
     | '/signin'
     | '/signup'
-    | '/api/$'
     | '/dashboard/overview'
     | '/api/auth/$'
     | '/api/rpc/$'
@@ -129,7 +118,6 @@ export interface FileRouteTypes {
     | '/(auth)/forgot'
     | '/(auth)/signin'
     | '/(auth)/signup'
-    | '/api/$'
     | '/dashboard/overview'
     | '/api/auth/$'
     | '/api/rpc/$'
@@ -141,7 +129,6 @@ export interface RootRouteChildren {
   authForgotRoute: typeof authForgotRoute
   authSigninRoute: typeof authSigninRoute
   authSignupRoute: typeof authSignupRoute
-  ApiSplatRoute: typeof ApiSplatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
@@ -168,13 +155,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/overview'
       preLoaderRoute: typeof DashboardOverviewRouteImport
       parentRoute: typeof DashboardRoute
-    }
-    '/api/$': {
-      id: '/api/$'
-      path: '/api/$'
-      fullPath: '/api/$'
-      preLoaderRoute: typeof ApiSplatRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/(auth)/signup': {
       id: '/(auth)/signup'
@@ -232,7 +212,6 @@ const rootRouteChildren: RootRouteChildren = {
   authForgotRoute: authForgotRoute,
   authSigninRoute: authSigninRoute,
   authSignupRoute: authSignupRoute,
-  ApiSplatRoute: ApiSplatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }

@@ -1,14 +1,13 @@
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "@/lib/auth";
 
-export async function createORPCContext() {
-	const headers = getRequestHeaders();
-	const session = await auth.api.getSession({ headers });
-
+export async function createContext() {
+	const session = await auth.api.getSession({
+		headers: getRequestHeaders(),
+	});
 	return {
 		session,
-		user: session?.user,
 	};
 }
 
-export type ORPCContext = Awaited<ReturnType<typeof createORPCContext>>;
+export type ORPCContext = Awaited<ReturnType<typeof createContext>>;

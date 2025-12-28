@@ -1,40 +1,50 @@
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
-import { BatchLinkPlugin } from "@orpc/client/plugins";
 import type { RouterClient } from "@orpc/server";
 import { createRouterClient } from "@orpc/server";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
+import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
-import { getRequestHeaders } from "@tanstack/react-start/server";
 
-import router from "@/orpc/router";
+import { toast } from "sonner";
+import { appRouter } from "@/orpc/router";
+import { createContext } from "./context";
+
+export const queryClient = new QueryClient({
+	queryCache: new QueryCache({
+		onError: (error, query) => {
+			toast.error(`Error: ${error.message}`, {
+				action: {
+					label: "retry",
+					onClick: query.invalidate,
+				},
+			});
+		},
+	}),
+});
 
 const getORPCClient = createIsomorphicFn()
 	.server(() =>
-		createRouterClient(router, {
-			context: () => ({
-				headers: getRequestHeaders(),
-			}),
+		createRouterClient(appRouter, {
+			context: async () => {
+				return createContext();
+			},
 		}),
 	)
-	.client((): RouterClient<typeof router> => {
+	.client((): RouterClient<typeof appRouter> => {
 		const link = new RPCLink({
 			url: `${window.location.origin}/api/rpc`,
-			plugins: [
-				new BatchLinkPlugin({
-					exclude: ({ path }) => path[0] === "sse",
-					groups: [
-						{
-							condition: () => true,
-							context: {},
-						},
-					],
-				}),
-			],
+			fetch(url, options) {
+				return fetch(url, {
+					...options,
+					credentials: "include",
+				});
+			},
 		});
+
 		return createORPCClient(link);
 	});
 
-export const client: RouterClient<typeof router> = getORPCClient();
+export const client: RouterClient<typeof appRouter> = getORPCClient();
 
 export const orpc = createTanstackQueryUtils(client);
