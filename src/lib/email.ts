@@ -1,6 +1,6 @@
 import { render } from "@react-email/render";
 import type { ReactElement } from "react";
-import { resend } from "./resned";
+import { resend } from "./resend";
 
 const DEFAULT_FROM = "Gestiona tu Psicología <info@gestionatupsicologia.com>";
 

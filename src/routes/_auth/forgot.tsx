@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { EnvelopeIcon } from "@phosphor-icons/react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -24,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
-export const Route = createFileRoute("/(auth)/forgot")({
+export const Route = createFileRoute("/_auth/forgot")({
 	component: RouteComponent,
 });
 
@@ -82,10 +81,7 @@ function RouteComponent() {
 										<FieldLabel>Email</FieldLabel>
 
 										<div className="relative">
-											<HugeiconsIcon
-												icon={Mail01Icon}
-												className="absolute top-2.5 left-3 h-4 w-4 text-muted-foreground"
-											/>
+											<EnvelopeIcon className="absolute top-2.5 left-3 h-4 w-4 text-muted-foreground" />
 											<Input
 												placeholder="email@email.com"
 												className="pl-10"
@@ -105,8 +101,8 @@ function RouteComponent() {
 					</form>
 				</CardContent>
 				<CardFooter className="flex justify-center border-t p-4">
-					<Button>
-						<Link to="/signin">Iniciar Sesión</Link>
+					<Button variant="link">
+						<Link to="/login">Iniciar Sesión</Link>
 					</Button>
 				</CardFooter>
 			</Card>

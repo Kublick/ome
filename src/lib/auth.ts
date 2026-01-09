@@ -40,5 +40,5 @@ export const auth = betterAuth({
 			clientSecret: env.GOOGLE_CLIENT_SECRET,
 		},
 	},
-	plugins: [tanstackStartCookies(), openAPI(), admin()],
+	plugins: [openAPI(), admin(), tanstackStartCookies()],
 });

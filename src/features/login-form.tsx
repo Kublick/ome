@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -32,6 +32,7 @@ const formSchema = z.object({
 type formType = z.infer<typeof formSchema>;
 
 export function LoginForm() {
+	const navigate = useNavigate();
 	const form = useForm<formType>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -45,12 +46,11 @@ export function LoginForm() {
 			{
 				email: formData.email,
 				password: formData.password,
-				callbackURL: "/dashboard/overview",
 			},
 			{
 				onSuccess: async () => {
 					toast.success("Inicio de sesión exitoso");
-					// Account creation is now handled by the setup wizard
+					navigate({ to: "/dashboard/overview" });
 				},
 				onError: (ctx) => {
 					console.log(ctx.error.status);

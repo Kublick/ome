@@ -9,17 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardOverviewRouteImport } from './routes/dashboard/overview'
+import { Route as DashboardAnalisisRouteImport } from './routes/dashboard/analisis'
+import { Route as ConfigCuentasRouteImport } from './routes/config/cuentas'
+import { Route as ConfigCategoriasRouteImport } from './routes/config/categorias'
 import { Route as ApiHealthRouteImport } from './routes/api.health'
-import { Route as authSignupRouteImport } from './routes/(auth)/signup'
-import { Route as authSigninRouteImport } from './routes/(auth)/signin'
-import { Route as authForgotRouteImport } from './routes/(auth)/forgot'
+import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthForgotRouteImport } from './routes/_auth/forgot'
+import { Route as DashboardFinanzasRecurrentesRouteImport } from './routes/dashboard/finanzas/recurrentes'
+import { Route as DashboardFinanzasPresupuestosRouteImport } from './routes/dashboard/finanzas/presupuestos'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
 
-const DashboardRoute = DashboardRouteImport.update({
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
@@ -32,28 +43,55 @@ const IndexRoute = IndexRouteImport.update({
 const DashboardOverviewRoute = DashboardOverviewRouteImport.update({
   id: '/overview',
   path: '/overview',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardAnalisisRoute = DashboardAnalisisRouteImport.update({
+  id: '/analisis',
+  path: '/analisis',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const ConfigCuentasRoute = ConfigCuentasRouteImport.update({
+  id: '/config/cuentas',
+  path: '/config/cuentas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfigCategoriasRoute = ConfigCategoriasRouteImport.update({
+  id: '/config/categorias',
+  path: '/config/categorias',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiHealthRoute = ApiHealthRouteImport.update({
   id: '/api/health',
   path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authSignupRoute = authSignupRouteImport.update({
-  id: '/(auth)/signup',
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/_auth/signup',
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authSigninRoute = authSigninRouteImport.update({
-  id: '/(auth)/signin',
-  path: '/signin',
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/_auth/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authForgotRoute = authForgotRouteImport.update({
-  id: '/(auth)/forgot',
+const AuthForgotRoute = AuthForgotRouteImport.update({
+  id: '/_auth/forgot',
   path: '/forgot',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardFinanzasRecurrentesRoute =
+  DashboardFinanzasRecurrentesRouteImport.update({
+    id: '/finanzas/recurrentes',
+    path: '/finanzas/recurrentes',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardFinanzasPresupuestosRoute =
+  DashboardFinanzasPresupuestosRouteImport.update({
+    id: '/finanzas/presupuestos',
+    path: '/finanzas/presupuestos',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   id: '/api/rpc/$',
   path: '/api/rpc/$',
@@ -67,92 +105,138 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteWithChildren
-  '/forgot': typeof authForgotRoute
-  '/signin': typeof authSigninRoute
-  '/signup': typeof authSignupRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/profile': typeof ProfileRoute
+  '/forgot': typeof AuthForgotRoute
+  '/login': typeof AuthLoginRoute
+  '/signup': typeof AuthSignupRoute
   '/api/health': typeof ApiHealthRoute
+  '/config/categorias': typeof ConfigCategoriasRoute
+  '/config/cuentas': typeof ConfigCuentasRoute
+  '/dashboard/analisis': typeof DashboardAnalisisRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/dashboard/finanzas/presupuestos': typeof DashboardFinanzasPresupuestosRoute
+  '/dashboard/finanzas/recurrentes': typeof DashboardFinanzasRecurrentesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteWithChildren
-  '/forgot': typeof authForgotRoute
-  '/signin': typeof authSigninRoute
-  '/signup': typeof authSignupRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/profile': typeof ProfileRoute
+  '/forgot': typeof AuthForgotRoute
+  '/login': typeof AuthLoginRoute
+  '/signup': typeof AuthSignupRoute
   '/api/health': typeof ApiHealthRoute
+  '/config/categorias': typeof ConfigCategoriasRoute
+  '/config/cuentas': typeof ConfigCuentasRoute
+  '/dashboard/analisis': typeof DashboardAnalisisRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/dashboard/finanzas/presupuestos': typeof DashboardFinanzasPresupuestosRoute
+  '/dashboard/finanzas/recurrentes': typeof DashboardFinanzasRecurrentesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteWithChildren
-  '/(auth)/forgot': typeof authForgotRoute
-  '/(auth)/signin': typeof authSigninRoute
-  '/(auth)/signup': typeof authSignupRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/profile': typeof ProfileRoute
+  '/_auth/forgot': typeof AuthForgotRoute
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/signup': typeof AuthSignupRoute
   '/api/health': typeof ApiHealthRoute
+  '/config/categorias': typeof ConfigCategoriasRoute
+  '/config/cuentas': typeof ConfigCuentasRoute
+  '/dashboard/analisis': typeof DashboardAnalisisRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/dashboard/finanzas/presupuestos': typeof DashboardFinanzasPresupuestosRoute
+  '/dashboard/finanzas/recurrentes': typeof DashboardFinanzasRecurrentesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/profile'
     | '/forgot'
-    | '/signin'
+    | '/login'
     | '/signup'
     | '/api/health'
+    | '/config/categorias'
+    | '/config/cuentas'
+    | '/dashboard/analisis'
     | '/dashboard/overview'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/dashboard/finanzas/presupuestos'
+    | '/dashboard/finanzas/recurrentes'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
+    | '/profile'
     | '/forgot'
-    | '/signin'
+    | '/login'
     | '/signup'
     | '/api/health'
+    | '/config/categorias'
+    | '/config/cuentas'
+    | '/dashboard/analisis'
     | '/dashboard/overview'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/dashboard/finanzas/presupuestos'
+    | '/dashboard/finanzas/recurrentes'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/(auth)/forgot'
-    | '/(auth)/signin'
-    | '/(auth)/signup'
+    | '/profile'
+    | '/_auth/forgot'
+    | '/_auth/login'
+    | '/_auth/signup'
     | '/api/health'
+    | '/config/categorias'
+    | '/config/cuentas'
+    | '/dashboard/analisis'
     | '/dashboard/overview'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/dashboard/finanzas/presupuestos'
+    | '/dashboard/finanzas/recurrentes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
-  authForgotRoute: typeof authForgotRoute
-  authSigninRoute: typeof authSigninRoute
-  authSignupRoute: typeof authSignupRoute
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  ProfileRoute: typeof ProfileRoute
+  AuthForgotRoute: typeof AuthForgotRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthSignupRoute: typeof AuthSignupRoute
   ApiHealthRoute: typeof ApiHealthRoute
+  ConfigCategoriasRoute: typeof ConfigCategoriasRoute
+  ConfigCuentasRoute: typeof ConfigCuentasRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -167,7 +251,28 @@ declare module '@tanstack/react-router' {
       path: '/overview'
       fullPath: '/dashboard/overview'
       preLoaderRoute: typeof DashboardOverviewRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/analisis': {
+      id: '/dashboard/analisis'
+      path: '/analisis'
+      fullPath: '/dashboard/analisis'
+      preLoaderRoute: typeof DashboardAnalisisRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/config/cuentas': {
+      id: '/config/cuentas'
+      path: '/config/cuentas'
+      fullPath: '/config/cuentas'
+      preLoaderRoute: typeof ConfigCuentasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/config/categorias': {
+      id: '/config/categorias'
+      path: '/config/categorias'
+      fullPath: '/config/categorias'
+      preLoaderRoute: typeof ConfigCategoriasRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/health': {
       id: '/api/health'
@@ -176,26 +281,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/signup': {
-      id: '/(auth)/signup'
+    '/_auth/signup': {
+      id: '/_auth/signup'
       path: '/signup'
       fullPath: '/signup'
-      preLoaderRoute: typeof authSignupRouteImport
+      preLoaderRoute: typeof AuthSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/signin': {
-      id: '/(auth)/signin'
-      path: '/signin'
-      fullPath: '/signin'
-      preLoaderRoute: typeof authSigninRouteImport
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/forgot': {
-      id: '/(auth)/forgot'
+    '/_auth/forgot': {
+      id: '/_auth/forgot'
       path: '/forgot'
       fullPath: '/forgot'
-      preLoaderRoute: typeof authForgotRouteImport
+      preLoaderRoute: typeof AuthForgotRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/finanzas/recurrentes': {
+      id: '/dashboard/finanzas/recurrentes'
+      path: '/finanzas/recurrentes'
+      fullPath: '/dashboard/finanzas/recurrentes'
+      preLoaderRoute: typeof DashboardFinanzasRecurrentesRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/finanzas/presupuestos': {
+      id: '/dashboard/finanzas/presupuestos'
+      path: '/finanzas/presupuestos'
+      fullPath: '/dashboard/finanzas/presupuestos'
+      preLoaderRoute: typeof DashboardFinanzasPresupuestosRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/api/rpc/$': {
       id: '/api/rpc/$'
@@ -214,25 +333,34 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface DashboardRouteChildren {
+interface DashboardRouteRouteChildren {
+  DashboardAnalisisRoute: typeof DashboardAnalisisRoute
   DashboardOverviewRoute: typeof DashboardOverviewRoute
+  DashboardFinanzasPresupuestosRoute: typeof DashboardFinanzasPresupuestosRoute
+  DashboardFinanzasRecurrentesRoute: typeof DashboardFinanzasRecurrentesRoute
 }
 
-const DashboardRouteChildren: DashboardRouteChildren = {
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardAnalisisRoute: DashboardAnalisisRoute,
   DashboardOverviewRoute: DashboardOverviewRoute,
+  DashboardFinanzasPresupuestosRoute: DashboardFinanzasPresupuestosRoute,
+  DashboardFinanzasRecurrentesRoute: DashboardFinanzasRecurrentesRoute,
 }
 
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRouteWithChildren,
-  authForgotRoute: authForgotRoute,
-  authSigninRoute: authSigninRoute,
-  authSignupRoute: authSignupRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  ProfileRoute: ProfileRoute,
+  AuthForgotRoute: AuthForgotRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthSignupRoute: AuthSignupRoute,
   ApiHealthRoute: ApiHealthRoute,
+  ConfigCategoriasRoute: ConfigCategoriasRoute,
+  ConfigCuentasRoute: ConfigCuentasRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }

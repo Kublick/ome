@@ -16,7 +16,6 @@ export const getSession = createIsomorphicFn()
 		return (session as AuthSession) ?? null;
 	})
 	.client(async (): Promise<AuthSession> => {
-		// Better Auth exposes this endpoint by default.
 		const res = await fetch("/api/auth/get-session", {
 			method: "GET",
 			credentials: "include",

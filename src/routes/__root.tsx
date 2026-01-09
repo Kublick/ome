@@ -12,7 +12,7 @@ import { Toaster } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
-import "../styles.css";
+import appCss from "../styles.css?url";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
@@ -68,6 +68,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 			{
 				title: "Ome",
+			},
+		],
+		links: [
+			{
+				rel: "stylesheet",
+				href: appCss,
 			},
 		],
 	}),
