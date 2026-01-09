@@ -28,8 +28,6 @@ interface NavBarUserProps {
 
 export function NavUser({ user }: NavBarUserProps) {
 	const { isMobile } = useSidebar();
-
-	console.log(user);
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>

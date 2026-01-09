@@ -52,7 +52,7 @@ function RouteComponent() {
 			setIsLoading(false);
 		} catch (error) {
 			console.log(error);
-			toast.error("Ocurrio un error intente mas tarde");
+			toast.error("Ocurrió un error, intente más tarde");
 			setIsLoading(false);
 			return;
 		}
@@ -63,10 +63,10 @@ function RouteComponent() {
 			<Card className="w-full max-w-md">
 				<CardHeader className="space-y-1">
 					<CardTitle className="font-bold text-2xl">
-						Reinciar tu constraseña
+						Reiniciar tu contraseña
 					</CardTitle>
 					<CardDescription>
-						Ingresa el correo electronico con el que te registraste previamente
+						Ingresa el correo electrónico con el que te registraste previamente
 						para restablecer tu contraseña
 					</CardDescription>
 				</CardHeader>
