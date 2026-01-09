@@ -3,23 +3,24 @@ import { DashboardLayout } from "@/features/layout/dashboard-layout";
 import { getUserServer } from "@/functions/getUser";
 
 export const Route = createFileRoute("/dashboard")({
-	loader: async () => {
+	beforeLoad: async () => {
 		const user = await getUserServer();
 
 		if (!user) {
 			throw redirect({ to: "/login" });
 		}
-		return user;
+
+		return {
+			user,
+		};
 	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const data = Route.useLoaderData();
-
 	return (
 		<div>
-			<DashboardLayout user={data} />
+			<DashboardLayout />
 		</div>
 	);
 }

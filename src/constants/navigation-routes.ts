@@ -1,13 +1,26 @@
 /**
  * Navigation routes configuration for TanStack Router
- * Following best practices with type-safe route definitions
+ * Following best practices with type-safe route definitions using linkOptions
  */
+
+import {
+	BankIcon,
+	ChartBarIcon,
+	LayoutIcon,
+	ListChecksIcon,
+	UserGearIcon,
+	UserListIcon,
+} from "@phosphor-icons/react";
+import type { LinkOptions } from "@tanstack/react-router";
+import { linkOptions } from "@tanstack/react-router";
+import { RepeatIcon } from "lucide-react";
+import type { ComponentType, SVGProps } from "react";
 
 export interface NavigationItem {
 	title: string;
-	to: string;
-	icon?: string;
-	isActive?: boolean;
+	linkOptions: LinkOptions;
+	// Icon is an optional React component (SVG) from phosphor or similar
+	icon?: ComponentType<SVGProps<SVGSVGElement>>;
 }
 
 export interface NavigationGroup {
@@ -17,7 +30,7 @@ export interface NavigationGroup {
 
 /**
  * Main navigation configuration for the dashboard
- * Uses TanStack Router's type-safe route paths
+ * Uses TanStack Router's linkOptions for type-safe route definitions
  */
 export const navigationRoutes: NavigationGroup[] = [
 	{
@@ -25,11 +38,17 @@ export const navigationRoutes: NavigationGroup[] = [
 		items: [
 			{
 				title: "Overview",
-				to: "/dashboard/overview",
+				linkOptions: linkOptions({
+					to: "/dashboard/overview",
+				}),
+				icon: LayoutIcon,
 			},
 			{
 				title: "Análisis",
-				to: "/dashboard/analisis",
+				linkOptions: linkOptions({
+					to: "/dashboard/analisis",
+				}),
+				icon: ChartBarIcon,
 			},
 		],
 	},
@@ -38,11 +57,17 @@ export const navigationRoutes: NavigationGroup[] = [
 		items: [
 			{
 				title: "Presupuestos",
-				to: "/dashboard/finanzas/presupuestos",
+				linkOptions: linkOptions({
+					to: "/dashboard/finanzas/presupuestos",
+				}),
+				icon: BankIcon,
 			},
 			{
 				title: "Recurrentes",
-				to: "/dashboard/finanzas/recurrentes",
+				linkOptions: linkOptions({
+					to: "/dashboard/finanzas/recurrentes",
+				}),
+				icon: RepeatIcon,
 			},
 		],
 	},
@@ -51,11 +76,17 @@ export const navigationRoutes: NavigationGroup[] = [
 		items: [
 			{
 				title: "Categorías",
-				to: "/config/categorias",
+				linkOptions: linkOptions({
+					to: "/dashboard/config/categorias",
+				}),
+				icon: ListChecksIcon,
 			},
 			{
 				title: "Cuentas",
-				to: "/config/cuentas",
+				linkOptions: linkOptions({
+					to: "/dashboard/config/cuentas",
+				}),
+				icon: UserListIcon,
 			},
 		],
 	},
@@ -64,7 +95,10 @@ export const navigationRoutes: NavigationGroup[] = [
 		items: [
 			{
 				title: "Perfil",
-				to: "/profile",
+				linkOptions: linkOptions({
+					to: "/profile",
+				}),
+				icon: UserGearIcon,
 			},
 		],
 	},
@@ -74,20 +108,3 @@ export const navigationRoutes: NavigationGroup[] = [
  * Flat list of all navigation routes for easy access
  */
 export const allRoutes = navigationRoutes.flatMap((group) => group.items);
-
-/**
- * Helper function to find a route by path
- */
-export const findRouteByPath = (path: string): NavigationItem | undefined => {
-	return allRoutes.find((route) => route.to === path);
-};
-
-/**
- * Helper function to check if a route is active
- */
-export const isRouteActive = (
-	currentPath: string,
-	routePath: string,
-): boolean => {
-	return currentPath === routePath || currentPath.startsWith(`${routePath}/`);
-};

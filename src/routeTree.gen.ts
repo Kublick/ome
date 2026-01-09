@@ -14,14 +14,14 @@ import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardOverviewRouteImport } from './routes/dashboard/overview'
 import { Route as DashboardAnalisisRouteImport } from './routes/dashboard/analisis'
-import { Route as ConfigCuentasRouteImport } from './routes/config/cuentas'
-import { Route as ConfigCategoriasRouteImport } from './routes/config/categorias'
 import { Route as ApiHealthRouteImport } from './routes/api.health'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotRouteImport } from './routes/_auth/forgot'
 import { Route as DashboardFinanzasRecurrentesRouteImport } from './routes/dashboard/finanzas/recurrentes'
 import { Route as DashboardFinanzasPresupuestosRouteImport } from './routes/dashboard/finanzas/presupuestos'
+import { Route as DashboardConfigCuentasRouteImport } from './routes/dashboard/config/cuentas'
+import { Route as DashboardConfigCategoriasRouteImport } from './routes/dashboard/config/categorias'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
 
@@ -49,16 +49,6 @@ const DashboardAnalisisRoute = DashboardAnalisisRouteImport.update({
   id: '/analisis',
   path: '/analisis',
   getParentRoute: () => DashboardRouteRoute,
-} as any)
-const ConfigCuentasRoute = ConfigCuentasRouteImport.update({
-  id: '/config/cuentas',
-  path: '/config/cuentas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConfigCategoriasRoute = ConfigCategoriasRouteImport.update({
-  id: '/config/categorias',
-  path: '/config/categorias',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiHealthRoute = ApiHealthRouteImport.update({
   id: '/api/health',
@@ -92,6 +82,17 @@ const DashboardFinanzasPresupuestosRoute =
     path: '/finanzas/presupuestos',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardConfigCuentasRoute = DashboardConfigCuentasRouteImport.update({
+  id: '/config/cuentas',
+  path: '/config/cuentas',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardConfigCategoriasRoute =
+  DashboardConfigCategoriasRouteImport.update({
+    id: '/config/categorias',
+    path: '/config/categorias',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   id: '/api/rpc/$',
   path: '/api/rpc/$',
@@ -111,12 +112,12 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/api/health': typeof ApiHealthRoute
-  '/config/categorias': typeof ConfigCategoriasRoute
-  '/config/cuentas': typeof ConfigCuentasRoute
   '/dashboard/analisis': typeof DashboardAnalisisRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/dashboard/config/categorias': typeof DashboardConfigCategoriasRoute
+  '/dashboard/config/cuentas': typeof DashboardConfigCuentasRoute
   '/dashboard/finanzas/presupuestos': typeof DashboardFinanzasPresupuestosRoute
   '/dashboard/finanzas/recurrentes': typeof DashboardFinanzasRecurrentesRoute
 }
@@ -128,12 +129,12 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/signup': typeof AuthSignupRoute
   '/api/health': typeof ApiHealthRoute
-  '/config/categorias': typeof ConfigCategoriasRoute
-  '/config/cuentas': typeof ConfigCuentasRoute
   '/dashboard/analisis': typeof DashboardAnalisisRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/dashboard/config/categorias': typeof DashboardConfigCategoriasRoute
+  '/dashboard/config/cuentas': typeof DashboardConfigCuentasRoute
   '/dashboard/finanzas/presupuestos': typeof DashboardFinanzasPresupuestosRoute
   '/dashboard/finanzas/recurrentes': typeof DashboardFinanzasRecurrentesRoute
 }
@@ -146,12 +147,12 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/api/health': typeof ApiHealthRoute
-  '/config/categorias': typeof ConfigCategoriasRoute
-  '/config/cuentas': typeof ConfigCuentasRoute
   '/dashboard/analisis': typeof DashboardAnalisisRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/dashboard/config/categorias': typeof DashboardConfigCategoriasRoute
+  '/dashboard/config/cuentas': typeof DashboardConfigCuentasRoute
   '/dashboard/finanzas/presupuestos': typeof DashboardFinanzasPresupuestosRoute
   '/dashboard/finanzas/recurrentes': typeof DashboardFinanzasRecurrentesRoute
 }
@@ -165,12 +166,12 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/api/health'
-    | '/config/categorias'
-    | '/config/cuentas'
     | '/dashboard/analisis'
     | '/dashboard/overview'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/dashboard/config/categorias'
+    | '/dashboard/config/cuentas'
     | '/dashboard/finanzas/presupuestos'
     | '/dashboard/finanzas/recurrentes'
   fileRoutesByTo: FileRoutesByTo
@@ -182,12 +183,12 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/api/health'
-    | '/config/categorias'
-    | '/config/cuentas'
     | '/dashboard/analisis'
     | '/dashboard/overview'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/dashboard/config/categorias'
+    | '/dashboard/config/cuentas'
     | '/dashboard/finanzas/presupuestos'
     | '/dashboard/finanzas/recurrentes'
   id:
@@ -199,12 +200,12 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_auth/signup'
     | '/api/health'
-    | '/config/categorias'
-    | '/config/cuentas'
     | '/dashboard/analisis'
     | '/dashboard/overview'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/dashboard/config/categorias'
+    | '/dashboard/config/cuentas'
     | '/dashboard/finanzas/presupuestos'
     | '/dashboard/finanzas/recurrentes'
   fileRoutesById: FileRoutesById
@@ -217,8 +218,6 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
   ApiHealthRoute: typeof ApiHealthRoute
-  ConfigCategoriasRoute: typeof ConfigCategoriasRoute
-  ConfigCuentasRoute: typeof ConfigCuentasRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
@@ -259,20 +258,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/analisis'
       preLoaderRoute: typeof DashboardAnalisisRouteImport
       parentRoute: typeof DashboardRouteRoute
-    }
-    '/config/cuentas': {
-      id: '/config/cuentas'
-      path: '/config/cuentas'
-      fullPath: '/config/cuentas'
-      preLoaderRoute: typeof ConfigCuentasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/config/categorias': {
-      id: '/config/categorias'
-      path: '/config/categorias'
-      fullPath: '/config/categorias'
-      preLoaderRoute: typeof ConfigCategoriasRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/api/health': {
       id: '/api/health'
@@ -316,6 +301,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardFinanzasPresupuestosRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/config/cuentas': {
+      id: '/dashboard/config/cuentas'
+      path: '/config/cuentas'
+      fullPath: '/dashboard/config/cuentas'
+      preLoaderRoute: typeof DashboardConfigCuentasRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/config/categorias': {
+      id: '/dashboard/config/categorias'
+      path: '/config/categorias'
+      fullPath: '/dashboard/config/categorias'
+      preLoaderRoute: typeof DashboardConfigCategoriasRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/api/rpc/$': {
       id: '/api/rpc/$'
       path: '/api/rpc/$'
@@ -336,6 +335,8 @@ declare module '@tanstack/react-router' {
 interface DashboardRouteRouteChildren {
   DashboardAnalisisRoute: typeof DashboardAnalisisRoute
   DashboardOverviewRoute: typeof DashboardOverviewRoute
+  DashboardConfigCategoriasRoute: typeof DashboardConfigCategoriasRoute
+  DashboardConfigCuentasRoute: typeof DashboardConfigCuentasRoute
   DashboardFinanzasPresupuestosRoute: typeof DashboardFinanzasPresupuestosRoute
   DashboardFinanzasRecurrentesRoute: typeof DashboardFinanzasRecurrentesRoute
 }
@@ -343,6 +344,8 @@ interface DashboardRouteRouteChildren {
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardAnalisisRoute: DashboardAnalisisRoute,
   DashboardOverviewRoute: DashboardOverviewRoute,
+  DashboardConfigCategoriasRoute: DashboardConfigCategoriasRoute,
+  DashboardConfigCuentasRoute: DashboardConfigCuentasRoute,
   DashboardFinanzasPresupuestosRoute: DashboardFinanzasPresupuestosRoute,
   DashboardFinanzasRecurrentesRoute: DashboardFinanzasRecurrentesRoute,
 }
@@ -359,8 +362,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthSignupRoute: AuthSignupRoute,
   ApiHealthRoute: ApiHealthRoute,
-  ConfigCategoriasRoute: ConfigCategoriasRoute,
-  ConfigCuentasRoute: ConfigCuentasRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
