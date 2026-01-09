@@ -1,7 +1,9 @@
-version: '3.8'
-
 services:
   app:
+    # Load environment variables preferring .env.local, fallback to .env
+    env_file:
+      - .env.local
+      - .env
     build:
       context: .
       dockerfile: Dockerfile
